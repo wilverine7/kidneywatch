@@ -9,7 +9,7 @@
         <ul class="nav nav-pills navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
@@ -21,7 +21,7 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a data-toggle = "tab" href="#content" class="nav-link" href="index.html">
+                <a href="#content" class="nav-link" href="index.html">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
@@ -31,30 +31,35 @@
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                Log
+                Add Log
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a data-toggle = "tab" href={% url 'test' %} class="nav-link collapsed" data-toggle="collapse" data-target="#collapseTwo"
+                <a href="{% url 'test' %}" class="nav-link collapsed"  data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Breakfast</span>
                 </a>
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                <a href="{% url 'test' %}" class="nav-link collapsed"  data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Lunch</span>
                 </a>
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                <a href="{% url 'test' %}" class="nav-link collapsed"  data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Dinner</span>
                 </a>
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                <a href="{% url 'test' %}" class="nav-link collapsed"  data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Snacks</span>
+                </a>
+                <a href="{% url 'test' %}" class="nav-link collapsed"  data-target="#collapseTwo"
+                    aria-expanded="true" aria-controls="collapseTwo">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Water</span>
                 </a>
                 
 
@@ -289,9 +294,7 @@
                     <!-- /.container-fluid -->
 
                 </div>
-            <div id="food">
-                <p>food</p>
-            </div>
+            
                 <!-- End of Main Content -->
 
                 <!-- Footer -->
