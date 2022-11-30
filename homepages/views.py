@@ -6,16 +6,16 @@ import ast
 # Create your views here.
 
 def indexPageView(request):
-    return render(request, 'index.html')
+    return render(request, 'homepages/index.html')
 
 def infoPageView(request):
-    return render(request, 'info.html')
+    return render(request, 'homepages/info.html')
 
 def dashboardPageView(request):
-    return render(request, 'dashboard.html')
+    return render(request, 'homepages/dashboard.html')
 
 def testPageView(request):
-    return render(request, 'test.html')
+    return render(request, 'homepages/test.html')
 
 def typePageView(request):
     foodType = None
@@ -66,9 +66,9 @@ def typePageView(request):
             'nutrients': nutrients,
             'nutrientValues': nutrientValues
         }
-        return render(request, 'type.html', context)
+        return render(request, 'homepages/type.html', context)
     else:
-        return render(request, 'type.html')
+        return render(request, 'homepages/type.html')
 
     #else:
         #return render(request, 'type.html')
@@ -123,15 +123,15 @@ def dataRender(request):
                 'nutrientValues': nutrientValues,
                 'list': nutrients
             }
-            return render(request, 'test.html', context)
+            return render(request, 'homepages/test.html', context)
         else:
-            return render(request, 'test.html')
+            return render(request, 'homepages/test.html')
 
 def loginPageView(request):
-    return render(request, 'login.html')
+    return render(request, 'homepages/login.html')
 
 def registrationPageView(request):
-    return render(request, 'register.html')
+    return render(request, 'homepages/register.html')
     
 def addFoodPageView(request):
     foodName = request.GET.get("foodName")
@@ -143,4 +143,5 @@ def addFoodPageView(request):
              'foodName': foodName,
              'nutrients': nutrients_dict
             }
-    return render(request, 'addFood.html', context)
+    return render(request, 'homepages/addFood.html', context)
+
