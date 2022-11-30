@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<form method="post" action="{% url 'type' %}">
+    {% csrf_token %}
+    <select name="foodGroups">
+        <option value='none' selected disabled hidden>Select a Food Category</option>
+        <option value="Foundation">Foundation Foods</option>
+        <option value="SR Legacy">SR Legacy Foods</option>
+        <option value="Survey">Survey Foods</option>
+        <option value="Branded">Branded Foods</option>
+    </select>
+    <br>
+    <br>
+    <h3>Enter a food:</h3>
+    {% csrf_token %}
+    <input name="searchFood" type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+    aria-label="Search" aria-describedby="basic-addon2" >
+    <button class="btn btn-primary"  type="submit">Search</button>
+</form>
+<br><br>
+<ul>
+    {% for i in foods %} <!-- loop through the foods -->
+    <form action="{%url 'type' %}">
+    <button name="addFood" value={{i}} type="submit">{{i}}</button><br><br>
+    </form>
+    {% comment %} <p> {%for key in nutrientValues %}
+        {{key}} </p> {% endcomment %}
+
+
+    {% comment %} {%for n in nutrients %} 
+        <p> {{n}}:
+            {%for key in nutrientValues %} 
+                {{ key }}</p> {% endcomment %}
+
+                {% comment %} {% [(k, nutrientValues[k]) for k in nutrientValues] %} {% endcomment %}
+                {% comment %} <p> {{foods[i][key]}}</p> {% endcomment %}
+    {% comment %} <li id="{{ i }}" >{{print(foods[i])}}</li> {% endcomment %}
+   
+    {% endfor %}
+    {% comment %} {% endfor %}
+    {% endfor %} {% endcomment %}
+</ul>
+{% comment %} {%input("Enter cheese: ")%} {% endcomment %}
+{% endblock %}

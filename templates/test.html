@@ -1,0 +1,61 @@
+{% extends 'dashboardNav.html' %}
+{% load static %}
+{% block content %}
+<form method="post" action="{% url 'test' %}">
+    {% csrf_token %}
+    <select name="foodGroups">
+        <option value='none' selected disabled hidden>Select a Food Category</option>
+        <option value="Foundation">Foundation Foods</option>
+        <option value="SR Legacy">SR Legacy Foods</option>
+        <option value="Survey">Survey Foods</option>
+        <option value="Branded">Branded Foods</option>
+    </select>
+    <br>
+    <br>
+<h3>Enter a food:</h3>
+<form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" method="post" action="{% url 'test' %}">
+    {% csrf_token %}
+    <input name="searchFood" type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+    aria-label="Search" aria-describedby="basic-addon2" >
+    <button class="btn btn-primary"  type="submit">Search</button>
+</form>
+<br><br>
+<ul>
+    {% for food_name, nutrients in foods.items %} <!-- loop through the foods -->
+    <form action="{%url 'test' %}">
+    <h1>{{food_name}}</h1>
+    <br>
+    
+        {% for nutrient_name, amount_unit in nutrients.items %}
+        {{nutrient_name}}: 
+        {% for value in amount_unit%}
+        {{value}}
+        {% endfor %}
+        <br>
+        {% endfor %}
+        <br>
+    
+    {% for nutrient_name, amount_unit in nutrients.items %}
+    {% for value in amount_unit%}
+    {% if not value.isalpha %}
+        <input type='hidden' name="{{nutrient_name}}" value="{{value}}">
+        
+        {% endif %}
+        {% endfor %}
+        {% endfor %}
+        <label for='Quantity'>Quantity</label>
+        <input type="number" min=".1" max="999" step="0.1">
+    <select name="foodMeasure">
+        <option value='G' selected>G</option>
+        <option value='MG'>MG</option>
+        <option value="C">C</option>
+        <option value="QT">QT</option>
+        <option value="ML">ML</option>
+        <option value="OZ">OZ</option>
+    </select>
+        {% endfor %}
+    
+    </form>
+</ul>
+{% comment %} {%input("Enter cheese: ")%} {% endcomment %}
+{% endblock %}
