@@ -21,9 +21,12 @@
 </form>
 <br><br>
 <ul>
+    <form action="{%url 'addFood'%}">
     {% for food_name, nutrients in foods.items %} <!-- loop through the foods -->
-    <form action="{%url 'test' %}">
-    <h1>{{food_name}}</h1>
+    
+    <button name="foodName" value="{{food_name}}">{{food_name}}</button>
+    <input type='hidden' name="{{food_name}}-nutrients" value="{{nutrients}}" >
+
     <br>
     
         {% for nutrient_name, amount_unit in nutrients.items %}
@@ -34,27 +37,21 @@
         <br>
         {% endfor %}
         <br>
-    
-    {% for nutrient_name, amount_unit in nutrients.items %}
-    {% for value in amount_unit%}
-    {% if not value.isalpha %}
-        <input type='hidden' name="{{nutrient_name}}" value="{{value}}">
+        
+        {% comment %} {% for nutrient_name, amount_unit in nutrients.items %}
+        {% for value in amount_unit%}
+        {% if not value.isalpha %}
+        <input type='hidden' name="nutrients" value="{{value}}">
         
         {% endif %}
         {% endfor %}
+        {% endfor %} {% endcomment %}
+        
+        <br>
         {% endfor %}
-        <label for='Quantity'>Quantity</label>
-        <input type="number" min=".1" max="999" step="0.1">
-    <select name="foodMeasure">
-        <option value='G' selected>G</option>
-        <option value='MG'>MG</option>
-        <option value="OZ">OZ</option>
-    </select>
-    <br>
-    <button type="submit">add</button>
-        {% endfor %}
-    
+        
     </form>
 </ul>
-{% comment %} {%input("Enter cheese: ")%} {% endcomment %}
+
+
 {% endblock %}
