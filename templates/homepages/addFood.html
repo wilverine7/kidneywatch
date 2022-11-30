@@ -15,6 +15,7 @@
 {% if foodName == 'water'%}
 <form action="store_food">
     <label for='Quantity' >Quantity</label>
+        <input name="foodName" type='hidden' value='{{foodName}}'>
         <input name="quantity" type="number" min="1" max="999" step="1" required>
     <select name="foodMeasure">
         <option value='G' selected>ML</option>
@@ -27,6 +28,7 @@
 {% else %}
 <form action="store_food">
     <label for='Quantity' >Quantity</label>
+    <input name="foodName" type='hidden' value='{{foodName}}'>
         <input name="quantity" type="number" min=".1" max="999" step="0.1" required>
     <select name="foodMeasure">
         <option value='G' selected>G</option>
@@ -39,6 +41,6 @@
     <input type='hidden' name="sodium" value="{{sodium}}" >
     <input type='hidden' name="phosphorus" value="{{phosphorus}}" >
     <br>
-    <button type='submit'>Add</button>
+    <button type='submit' href="{% url 'index' %} ">Add</button>
 </form>
 {% endif %}

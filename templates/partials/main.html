@@ -15,6 +15,58 @@
     {% include 'partials/nav.html' %}
  
     <div class = "container">
+      <!-- Sidebar -->
+      <ul class="nav nav-pills navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+        <!-- Sidebar - Brand -->
+        <a class="sidebar-brand d-flex align-items-center justify-content-center">
+            <div class="sidebar-brand-icon rotate-n-15">
+                <i class="fas fa-laugh-wink"></i>
+            </div>
+            <div class="sidebar-brand-text mx-3">Hi {{firstName}}</div>
+        </a>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider my-0">
+
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item active">
+            <a href="#content" class="nav-link" href="index.html">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Dashboard</span></a>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Heading -->
+        <div class="sidebar-heading">
+            Add Log
+        </div>
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        <form action="{% url 'test' %}">
+        <li class="nav-item">
+            <button name="mealType" value="B" class="nav-link collapsed fas fa-fw fa-cog"  data-target="#collapseTwo"
+                aria-expanded="true" aria-controls="collapseTwo">Breakfast</button>
+            <button name="mealType" value="L" class="nav-link collapsed fas fa-fw fa-cog"  data-target="#collapseTwo"
+                aria-expanded="true" aria-controls="collapseTwo">Lunch</button>
+            <button name="mealType" value="D" class="nav-link collapsed fas fa-fw fa-cog"  data-target="#collapseTwo"
+                aria-expanded="true" aria-controls="collapseTwo">Dinner</button>
+            <button name="mealType" value="S" class="nav-link collapsed fas fa-fw fa-cog"  data-target="#collapseTwo"
+                aria-expanded="true" aria-controls="collapseTwo">Snacks</button>
+        </form>
+        <form action="{% url 'addFood' %}">
+            <li class="nav-item">
+            <button name="foodName" value="water" class="nav-link collapsed fas fa-fw fa-cog"  data-target="#collapseTwo"
+                aria-expanded="true" aria-controls="collapseTwo">Water</button>
+        </form>
+            
+        
+
+    </ul>
+    
+    <!-- End of Sidebar -->
         {% block content %}
  
         {% endblock %}

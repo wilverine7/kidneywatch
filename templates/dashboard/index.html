@@ -3,6 +3,7 @@
 {% block title %} Dashboard {% endblock %}
  
 {% block content %}
+
 <div class = "row mt-3 pt-3">
     <div class = "col-md-4">
         <!-- form will go here later-->
@@ -44,8 +45,28 @@
                 scales: {
                     y: {
                         beginAtZero: true,
-                        max: 100
+                        ticks: {
+                            display: false
+                        }
                     }
+                    // annotation: {
+                    //     annotations: [{
+                    //         type: 'line',
+                    //         mode: 'horizontal',
+                    //         scaleID: 'y-axis-0',
+                    //         value: '100',
+                    //         borderColor: 'tomato',
+                    //         borderWidth: 1
+                    //     }],
+                    //     drawTime: "afterDraw" // (default)
+                    // }
+                    // y: {
+                    //     // ticks: {
+                    //     //     display: false
+                    //     // }
+                        
+                    //     //max: 200
+                    // }
                 }
             }
         });

@@ -40,7 +40,7 @@ class meal_type(models.Model):
         return (self.meal_type_description)
 
 class substance(models.Model):
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=100)
     k = models.FloatField()
     na = models.FloatField()
     protein = models.FloatField()
