@@ -3,6 +3,7 @@ from django.shortcuts import render
 import pip._vendor.requests as requests
 import json
 import ast
+from .models import comorbidity_type, person, daily_log, meal_type, substance, meal
 # Create your views here.
 
 def indexPageView(request):
@@ -136,6 +137,7 @@ def registrationPageView(request):
 def addFoodPageView(request):
     foodName = request.GET.get("foodName")
     nutrients = request.GET.get(foodName+"-nutrients")
+<<<<<<< Updated upstream
     nutrients = nutrients.replace('\'','\"')
 
     nutrients_dict = json.loads(nutrients) 
@@ -144,3 +146,143 @@ def addFoodPageView(request):
              'nutrients': nutrients_dict
             }
     return render(request, 'addFood.html', context)
+=======
+    mealType = request.POST.get('mealType')
+    water = 0
+    potassium = 0
+    sodium = 0
+    protein = 0
+    phosphorus = 0
+    if nutrients is None:
+        pass
+    else:
+        nutrients = nutrients.replace('\'','\"')
+        nutrients_dict = json.loads(nutrients) 
+
+        for nutrient_name, amount_unit in nutrients_dict.items():
+            if nutrient_name == "Water":
+                water = amount_unit[0]
+            elif nutrient_name == "Protein":
+                protein = amount_unit[0]
+            elif nutrient_name == "Phosphorus, P":
+                phosphorus = amount_unit[0]
+            elif nutrient_name == "Potassium, K":
+                potassium = amount_unit[0]
+            elif nutrient_name == "Sodium, Na":
+                sodium = amount_unit[0]
+    context = {
+             'foodName': foodName,
+             'nutrients': nutrients_dict,
+             'mealType': mealType,
+             'water': water,
+             'phosphorus': phosphorus,
+             'sodium': sodium,
+             'potassium': potassium,
+             'protein': protein
+            }
+    return render(request, 'homepages/addFood.html', context)
+
+def addWaterPageView(request):
+    water = request.GET.get("water")
+    context = {
+        'name': water
+    }
+    return render(request, 'homepages/addWater.html', context)
+
+def storeFoodItemPageView(request):
+    # if request.method == 'POST':
+
+
+    #add date
+    record_date = daily_log()
+    record_date.date = request.POST.get('date')
+
+    #add meal
+
+    new_meal = meal()
+    new_meal.meal_type_id = request.POST.get('mealType')
+
+    #Create a new Substance object from the model (like a new record)
+    new_substance = substance()
+    
+    #Store the data from the form to the new object's attributes (like columns)
+    new_substance.name = request.GET.get('foodName')
+    
+    water = request.GET.get("water")
+    if water == '':
+        water = 0
+    else:
+        water = float(water)
+    sodium = request.GET.get("sodium")
+    if sodium == '':
+        sodium = 0
+    else:
+        sodium = float(sodium)
+    protein = request.GET.get("protein")
+    if protein == '':
+        protein = 0
+    else:
+        protein = float(protein)
+    phosphorus = request.GET.get("phosphorus")
+    if phosphorus == '':
+        phosphorus = 0
+    else:
+        phosphorus = float(phosphorus)
+    potassium = request.GET.get("potassium")
+    if potassium == '':
+        potassium = 0
+    else:
+        potassium = float(potassium)
+    
+    # protein = float(request.GET.get("protein"))
+    # phosphorus = float(request.GET.get("phosphorus"))
+    # potassium = float(request.GET.get("potassium"))
+    # sodium = float(request.GET.get("sodium"))
+    quantity = float(request.GET.get("quantity"))
+    foodMeasure = request.GET.get("foodMeasure")
+    if foodMeasure == "G":
+        conversion = quantity/100
+        protein = protein * conversion
+        phosphorus = phosphorus * conversion
+        potassium = potassium * conversion
+        sodium = sodium * conversion
+        water = water * conversion
+    elif foodMeasure == "MG":
+        conversion = quantity / 100000
+        protein = protein * conversion
+        phosphorus = phosphorus * conversion
+        potassium = potassium * conversion
+        sodium = sodium * conversion
+        water = water * conversion
+    elif foodMeasure == "OZ":
+        conversion = quantity * 28.35 / 100
+        protein = protein * conversion
+        phosphorus = phosphorus * conversion
+        potassium = potassium * conversion
+        sodium = sodium * conversion
+        water = water * conversion
+    protein = round(protein,3)
+    phosphorus = round(phosphorus,3)
+    potassium = round(potassium, 3)
+    sodium = round(sodium, 3)
+    water = round(water,3)
+
+    new_substance.protein = protein
+    new_substance.phosphate = phosphorus
+    new_substance.k = potassium
+    new_substance.na = sodium
+    new_substance.water = water
+
+    
+    #Save the employee record
+    new_substance.save()
+        
+    #Make a list of all of the employee records and store it to the variable
+    # data = substance.objects.all()
+
+    #Assign the list of employee records to the dictionary key "our_emps"
+    # context = {
+    #     "substances" : data
+    # }
+    return render(request, 'homepages/dashboard.html') 
+>>>>>>> Stashed changes

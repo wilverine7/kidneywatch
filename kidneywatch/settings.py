@@ -39,6 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'homepages.apps.HomepagesConfig',
+<<<<<<< Updated upstream
+=======
+    'dashboard.apps.DashboardConfig',
+    
+>>>>>>> Stashed changes
 ]
 
 MIDDLEWARE = [

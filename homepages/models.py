@@ -14,7 +14,7 @@ class person(models.Model):
     gender = models.CharField(max_length=1)
     weight = models.IntegerField(default=0)
     height = models.IntegerField(default=0)
-    personname = models.CharField(max_length=20)
+    username = models.CharField(max_length=20)
     password = models.CharField(max_length=20)
     comorbidity_type = models.ForeignKey(comorbidity_type(), on_delete=models.DO_NOTHING)
 
@@ -40,7 +40,7 @@ class meal_type(models.Model):
         return (self.meal_type_description)
 
 class substance(models.Model):
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=1000)
     k = models.FloatField()
     na = models.FloatField()
     protein = models.FloatField()

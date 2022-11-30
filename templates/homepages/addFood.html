@@ -1,0 +1,46 @@
+
+{{foodName}}
+<br>
+
+
+{% for nutrient_name, amount_unit in nutrients.items %}
+        {{nutrient_name}}: 
+        {% for value in amount_unit%}
+        {{value}}
+        {% endfor %}
+        <br>
+        {% endfor %} 
+
+
+{% if foodName == 'water'%}
+<form action="store_food">
+    <input type="hidden" name="foodName" value="{{foodName}}">
+    <label for='Quantity' >Quantity</label>
+        <input name="quantity" type="number" min="1" max="999" step="1" required>
+    <select name="foodMeasure">
+        <option value='G' selected>ML</option>
+        <option value="OZ">OZ</option>
+    </select>
+    <input type='hidden' name="water" value="{{water}}" >
+    <br>
+    <button type='submit'>Add</button>
+</form>
+{% else %}
+<form action="store_food">
+    <label for='Quantity' >Quantity</label>
+        <input name="quantity" type="number" min=".1" max="999" step="0.1" required>
+    <select name="foodMeasure">
+        <option value='G' selected>G</option>
+        <option value='MG'>MG</option>
+        <option value="OZ">OZ</option>
+    </select>
+    <input type="hidden" name="foodName" value="{{foodName}}">
+    <input type='hidden' name="water" value="{{water}}" >
+    <input type='hidden' name="potassium" value="{{potassium}}" >
+    <input type='hidden' name="protein" value="{{protein}}" >
+    <input type='hidden' name="sodium" value="{{sodium}}" >
+    <input type='hidden' name="phosphorus" value="{{phosphorus}}" >
+    <br>
+    <button type='submit'>Add</button>
+</form>
+{% endif %}
