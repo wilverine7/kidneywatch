@@ -1,43 +1,58 @@
 from django.db import models
+from datetime import datetime, timedelta
 
-class Person(models.Model):
-    firstName = models.CharField(max_length=25)
-    lastName = models.CharField(max_length=25)
-    email = models.EmailField()
-    birthDate = models.DateField()
+class comorbidity_type(models.Model):
+    comorbidity_type_description = models.CharField(max_length=100)
+
+    def __str__(self):
+        return (self.comorbidity_type_description)
+class person(models.Model):
+    first_name = models.CharField(max_length=25)
+    last_name = models.CharField(max_length=25)
+    email = models.EmailField(max_length=100)
+    birth_date = models.DateField(default=datetime.today)
     gender = models.CharField(max_length=1)
-    weight = models.IntegerField()
-    height = models.IntegerField()
+    weight = models.IntegerField(default=0)
+    height = models.IntegerField(default=0)
+    personname = models.CharField(max_length=20)
+    password = models.CharField(max_length=20)
+    comorbidity_type = models.ForeignKey(comorbidity_type(), on_delete=models.DO_NOTHING)
 
     def __str__(self):
-        return (self.id)
-class ComorbidityType(models.Model):
-    comorbidityTypeDescription = models.CharField(max_length=100)
+        return (self.full_name)
+    
+    @property
+    def fullName(self):
+        return '%s %s' % (self.first_name, self.last_name)
+
+class daily_log(models.Model):
+    date = models.DateField(default=datetime.today)
+    person = models.ForeignKey(person, on_delete=models.DO_NOTHING)
 
     def __str__(self):
-        return (self.id)
+        return (self.date)
 
-class DailyLog(models.Model):
-    date = models.DateField()
 
-    def __str__(self):
-        return (self.id)
-
-class Meal(models.Model):
+class meal_type(models.Model):
+    meal_type_description = models.CharField(max_length=100)
 
     def __str__(self):
-        return (self.id)
+        return (self.meal_type_description)
 
-class MealType(models.Model):
-    mealTypeDescription = models.CharField(max_length=100)
-
-    def __str__(self):
-        return (self.id)
-
-class Substance(models.Model):
+class substance(models.Model):
     name = models.CharField(max_length=30)
-    K = models.FloatField()
-    Na = models.FloatField()
+    k = models.FloatField()
+    na = models.FloatField()
     protein = models.FloatField()
-    Phos = models.FloatField()
+    phosphate = models.FloatField()
     water = models.FloatField()
+
+    def __str__(self):
+        return(self.name)
+    
+class meal(models.Model):
+    substance = models.ManyToManyField(substance)
+    meal_type = models.ForeignKey(meal_type(), on_delete=models.DO_NOTHING)
+
+    def __str__(self):
+        return (self.id)
