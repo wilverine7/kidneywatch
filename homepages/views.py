@@ -15,7 +15,11 @@ def dashboardPageView(request):
     return render(request, 'dashboard.html')
 
 def testPageView(request):
-    return render(request, 'test.html')
+    mealType = request.POST.get('mealType')
+    context ={
+        'mealType': mealType
+    }
+    return render(request, 'test.html', context)
 
 def typePageView(request):
     foodType = None
@@ -78,6 +82,7 @@ def dataRender(request):
         foodType = request.POST.get('foodGroups')
         search = None
         search = request.POST.get('searchFood')
+        
         parameters = { 
             "api_key": 'EPMl3IkB2Wb9GzdAbcfaaYkCCucSG7JQxbGUoWGK',
             "query": search,
@@ -134,13 +139,100 @@ def registrationPageView(request):
     return render(request, 'register.html')
     
 def addFoodPageView(request):
+    nutrients=""
+    nutrients_dict={}
     foodName = request.GET.get("foodName")
     nutrients = request.GET.get(foodName+"-nutrients")
-    nutrients = nutrients.replace('\'','\"')
+    mealType = request.POST.get('mealType')
 
-    nutrients_dict = json.loads(nutrients) 
+    if nutrients is None:
+        pass
+    else:
+        nutrients = nutrients.replace('\'','\"')
+        nutrients_dict = json.loads(nutrients) 
+
     context = {
              'foodName': foodName,
-             'nutrients': nutrients_dict
+             'nutrients': nutrients_dict,
+             'mealType': mealType
             }
     return render(request, 'addFood.html', context)
+
+def addWaterPageView(request):
+    water = request.GET.get("water")
+    context = {
+        'name': water
+    }
+    return render(request, 'addWater.html', context)
+
+def storeFoodItemPageView(request):
+    if request.method == 'POST':
+
+
+        #add date
+        record_date = daily_log()
+        record_date.date = request.POST.get('date')
+
+        #add meal
+
+        new_meal = meal()
+        new_meal.meal_type_id = request.POST.get('mealType')
+
+        #Create a new Substance object from the model (like a new record)
+        new_substance = substance()
+        
+        #Store the data from the form to the new object's attributes (like columns)
+        new_substance.name = request.POST.get('name')
+        
+        water = float(request.GET.get("water"))
+        protein = float(request.GET.get("protein"))
+        phosphorus = float(request.GET.get("phosphorus"))
+        potassium = float(request.GET.get("potassium"))
+        sodium = float(request.GET.get("sodium"))
+        quantity = float(request.GET.get("quantity"))
+        foodMeasure = request.GET.get("foodMeasure")
+        if foodMeasure == "G":
+            conversion = quantity/100
+            protein = protein * conversion
+            phosphorus = phosphorus * conversion
+            potassium = potassium * conversion
+            sodium = sodium * conversion
+            water = water * conversion
+        elif foodMeasure == "MG":
+            conversion = quantity / 100000
+            protein = protein * conversion
+            phosphorus = phosphorus * conversion
+            potassium = potassium * conversion
+            sodium = sodium * conversion
+            water = water * conversion
+        elif foodMeasure == "OZ":
+            conversion = quantity * 28.35 / 100
+            protein = protein * conversion
+            phosphorus = phosphorus * conversion
+            potassium = potassium * conversion
+            sodium = sodium * conversion
+            water = water * conversion
+        protein = round(protein,3)
+        phosphorus = round(phosphorus,3)
+        potassium = round(potassium, 3)
+        sodium = round(sodium, 3)
+        water = round(water,3)
+
+        new_substance.protein = protein
+        new_substance.phosphate = phosphorus
+        new_substance.potassium = potassium
+        new_substance.sodium = sodium
+        new_substance.water = water
+
+        
+        #Save the employee record
+        new_substance.save()
+        
+    #Make a list of all of the employee records and store it to the variable
+    data = substance.objects.all()
+
+    #Assign the list of employee records to the dictionary key "our_emps"
+    context = {
+        "substances" : data
+    }
+    return render(request, 'dashboard.html', context) 

@@ -35,34 +35,24 @@
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <form action="post">
+            <form action="{% url 'test' %}">
             <li class="nav-item">
-                <a href="{% url 'test' %}" class="nav-link collapsed"  data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Breakfast</span>
-                </a>
-                <a href="{% url 'test' %}" class="nav-link collapsed"  data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Lunch</span>
-                </a>
-                <a href="{% url 'test' %}" class="nav-link collapsed"  data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Dinner</span>
-                </a>
-                <a href="{% url 'test' %}" class="nav-link collapsed"  data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Snacks</span>
-                </a>
-                <a href="{% url 'test' %}" class="nav-link collapsed"  data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Water</span>
-                </a>
+                <button name="mealType" value="B" class="nav-link collapsed fas fa-fw fa-cog"  data-target="#collapseTwo"
+                    aria-expanded="true" aria-controls="collapseTwo">Breakfast</button>
+                <button name="mealType" value="L" class="nav-link collapsed fas fa-fw fa-cog"  data-target="#collapseTwo"
+                    aria-expanded="true" aria-controls="collapseTwo">Lunch</button>
+                <button name="mealType" value="D" class="nav-link collapsed fas fa-fw fa-cog"  data-target="#collapseTwo"
+                    aria-expanded="true" aria-controls="collapseTwo">Dinner</button>
+                <button name="mealType" value="S" class="nav-link collapsed fas fa-fw fa-cog"  data-target="#collapseTwo"
+                    aria-expanded="true" aria-controls="collapseTwo">Snacks</button>
             </form>
+            <form action="{% url 'addFood' %}">
+                <li class="nav-item">
+                <button name="foodName" value="water" class="nav-link collapsed fas fa-fw fa-cog"  data-target="#collapseTwo"
+                    aria-expanded="true" aria-controls="collapseTwo">Water</button>
+            </form>
+                
+            
 
         </ul>
         
