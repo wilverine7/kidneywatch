@@ -1,0 +1,10 @@
+{% extends 'homepages/base.html' %}
+{% load static %}
+{% block content %}
+<form>
+    <select name="foodGroups" id="foodGroups" action="{% url 'test' %}">
+        <option value="Foundation">Foundation Foods</option>
+        <option value="Branded">Branded Foods</option>
+    </select>
+</form>
+{% endblock %}
