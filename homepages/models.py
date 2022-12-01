@@ -6,32 +6,25 @@ class comorbidity_type(models.Model):
 
     def __str__(self):
         return (self.comorbidity_type_description)
+
 class person(models.Model):
-    first_name = models.CharField(max_length=25)
-    last_name = models.CharField(max_length=25)
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
     email = models.EmailField(max_length=100)
     birth_date = models.DateField(default=datetime.today)
     gender = models.CharField(max_length=1)
     weight = models.IntegerField(default=0)
     height = models.IntegerField(default=0)
-    personname = models.CharField(max_length=20)
-    password = models.CharField(max_length=20)
-    comorbidity_type = models.ForeignKey(comorbidity_type(), on_delete=models.DO_NOTHING)
+    personname = models.CharField(max_length=30)
+    password = models.CharField(max_length=150)
+    comorbidity_type = models.ForeignKey(comorbidity_type, on_delete=models.DO_NOTHING)
 
     def __str__(self):
         return (self.full_name)
     
     @property
-    def fullName(self):
+    def full_name(self):
         return '%s %s' % (self.first_name, self.last_name)
-
-class daily_log(models.Model):
-    date = models.DateField(default=datetime.today)
-    person = models.ForeignKey(person, on_delete=models.DO_NOTHING)
-
-    def __str__(self):
-        return (self.date)
-
 
 class meal_type(models.Model):
     meal_type_description = models.CharField(max_length=100)
@@ -50,9 +43,13 @@ class substance(models.Model):
     def __str__(self):
         return(self.name)
     
-class meal(models.Model):
-    substance = models.ManyToManyField(substance)
-    meal_type = models.ForeignKey(meal_type(), on_delete=models.DO_NOTHING)
+
+class daily_log(models.Model):
+    date = models.DateField(default=datetime.today)
+    person = models.ForeignKey(person, on_delete=models.CASCADE)
+    meal_type = models.ForeignKey(meal_type, on_delete=models.DO_NOTHING)
+    substance = models.OneToOneField(substance, on_delete=models.DO_NOTHING)
 
     def __str__(self):
-        return (self.id)
+        return (str(self.date))
+

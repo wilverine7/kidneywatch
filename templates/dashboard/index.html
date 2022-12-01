@@ -3,20 +3,26 @@
 {% block title %} Dashboard {% endblock %}
  
 {% block content %}
+<p>Type of results {{ results }} {{ sql }}</p>
 
 <div class = "row mt-3 pt-3">
+    
     <div class = "col-md-4">
         <!-- form will go here later-->
     </div>
     <div id="chart1" class = "col-md-8">
         <p>Percentage of Needed intake</p>
+        <p>{{personSubstances}}</p>
+        <p>{{MealType}}</p>
+        <p>{{substance}}</p>
+        <p>{{filter}}</p>
         <p>{{substanceK}}</p>
         <p>{{substanceKTotal}}</p>
         <canvas id="myChart" width="400" height="400"></canvas>
         <script>
-        const ctx = document.getElementById('myChart').getContext('2d');
-        const myChart = new Chart(ctx, {
-            type: 'bar',
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'bar',
             data: {
                 labels: [{% for data in nutrientlist %} '{{data}}', {% endfor %}],
                 datasets: [{
@@ -49,169 +55,82 @@
                             display: false
                         }
                     }
-                    // annotation: {
-                    //     annotations: [{
-                    //         type: 'line',
-                    //         mode: 'horizontal',
-                    //         scaleID: 'y-axis-0',
-                    //         value: '100',
-                    //         borderColor: 'tomato',
-                    //         borderWidth: 1
-                    //     }],
-                    //     drawTime: "afterDraw" // (default)
-                    // }
-                    // y: {
-                    //     // ticks: {
-                    //     //     display: false
-                    //     // }
-                        
-                    //     //max: 200
-                    // }
+                    
                 }
             }
         });
-        
-            const ctx2 = document.getElementById('myChart').getContext('2d');
-            const mynewChart = new Chart(ctx2, {
-                type: 'bar',
-                data: {
-                    labels: [{% for data in nutrientlist %} '{{data}}', {% endfor %}],
-                    datasets: [{
-                        label: 'Percent Completed',
-                        data: [{% for data in totalList %} {{data}}, {% endfor %}],
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.2)',
-                            'rgba(54, 162, 235, 0.2)',
-                            'rgba(255, 206, 86, 0.2)',
-                            'rgba(75, 192, 192, 0.2)',
-                            'rgba(153, 102, 255, 0.2)',
-                            'rgba(255, 159, 64, 0.2)'
-                        ],
-                        borderColor: [
-                            'rgba(255, 99, 132, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(255, 206, 86, 1)',
-                            'rgba(75, 192, 192, 1)',
-                            'rgba(153, 102, 255, 1)',
-                            'rgba(255, 159, 64, 1)'
-                        ],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-        
-        </script>
-    </div>
-</div>
-<div class = "row mt-3 pt-3">
-    <div class = "col-md-4">
-        <!-- form will go here later-->
-    </div>
-    <div id="mynewChart">
-        <p>{{substanceName}}</p>
-        <p>{{substanceK}}</p>
-        <p>{{substanceKTotal}}</p>
-        <canvas id="mynewChart" width="400" height="400"></canvas>
-        <script>
-        const ctx2 = document.getElementById('mynewChart').getContext('2d');
-        const mynewChart = new Chart(ctx2, {
-            type: 'bar',
-            data: {
-                labels: [{% for data in nutrientlist %} '{{data}}', {% endfor %}],
-                datasets: [{
-                    label: 'Percent Completed',
-                    data: [{% for data in totalList %} {{data}}, {% endfor %}],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-        </script>
-    </div>
-</div>
 
+        
+            const horizontalDottedLine = {
+            id: 'horizontalDottedLine',
+            beforeDataSetsDraw(chart, args, options) {
+                const { ctx, chartArea: { top, right, bottom, left, width, height },
+                scales: {x,y}} = chart;
+            ctx.save();
+
+            ctx.strokeStyle = 'grey';
+            ctx.strokeRect(left, 200, width, 0);
+            ctx.restore();
+            }
+        
+        }
+
+        // const config = {
+        //     type: 'bar'
+        //     data,
+        //     options: {
+        //         scales: {
+        //             y: {
+        //                 beginAtZero: true
+        //             }
+        //         }
+        //     },
+        //     plugins: [horizontalDottedLine]
+        // }
+
+        {% comment %} {% for i in results %} 
+         {{i}}
+        <p>This is our data</p>
+        {% endfor %} {% endcomment %}  
+        </script>
+    </div>
+</div>
+<canvas id="myNewChart" width="400" height="400"></canvas>
+<script>
+var ctx2 = document.getElementById('myNewChart').getContext('2d');
+var myNewChart = new Chart(ctx2, {
+    type: 'bar',
+    data: {
+        labels: [{% for data in nutrientlist %} '{{data}}', {% endfor %}],
+        datasets: [{
+            label: 'Percent Completed',
+            data: [{% for data in totalList %} {{data}}, {% endfor %}],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+<script/>
 {% endblock %}
-{% comment %} {% extends 'partials/main.html'%}
- 
-{% block title %} Dashboard {% endblock %}
- 
-{% block content %}
-<div class = "row mt-3 pt-3">
-    <div class = "col-md-4">
-        <!-- form will go here later-->
-    </div>
-    <div class = "col-md-8">
-        <p>{{substanceName}}</p>
-        <p>{{substanceK}}</p>
-        <p>{{substanceKTotal}}</p>
-        <canvas id="myChart" width="400" height="400"></canvas>
-        <script>
-        const ctx = document.getElementById('myChart').getContext('2d');
-        const myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: [{% for data in substanceName %} '{{data}}', {% endfor %}],
-                datasets: [{
-                    label: 'Amounts of K',
-                    data: [{% for data in substanceK %} {{data}}, {% endfor %}],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-        </script>
-    </div>
-</div>
-{% endblock %} {% endcomment %}
-

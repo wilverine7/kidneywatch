@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'kidneywatch.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'kidneywatch2',
+        'NAME': 'kidneywatch4',
         'USER': 'postgres',
         'PASSWORD': 'manger',
         'HOST': 'localhost'

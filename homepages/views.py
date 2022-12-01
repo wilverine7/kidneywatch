@@ -1,9 +1,17 @@
 # from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import pip._vendor.requests as requests
 import json
 import ast
-from .models import comorbidity_type, person, daily_log, meal_type, substance, meal
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
+from datetime import date
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
+
+
+from .forms import CreateUserForm
+from .models import comorbidity_type, person, daily_log, meal_type, substance
 # Create your views here.
 
 def indexPageView(request):
@@ -127,31 +135,90 @@ def dataRender(request):
             return render(request, 'homepages/test.html', context)
         else:
             return render(request, 'homepages/test.html')
+def loginAuthentication(request):
+    if request.method =='POST':
+        username= request.POST.get('username')
+        password= request.POST.get('password')
 
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request,user)
+            return redirect('dashboard')
+            
 def loginPageView(request):
+    
+
     return render(request, 'homepages/login.html')
 
 def registrationPageView(request):
-    return render(request, 'homepages/register.html')
+    form = CreateUserForm()
+
+    if request.method =='POST':
+        form = CreateUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            user = form.cleaned_data.get('username')
+            messages.success(request, "Welcome to Kidney Watch " + user+ "!")
+
+            return redirect('registration2')
+
+    context = {'form': form}
+    return render(request, 'homepages/register.html', context)
+
+
+def registrationPageView2(request):
+
+    
+    return render(request, 'homepages/registration2.html')
+
+def createUserPageView(request):
+    if request.method == 'POST':
+
+        firstName = request.POST.get("firstName")
+        lastName = request.POST.get("lastName")
+        birthDate = request.POST.get("birthDate")
+        gender = request.POST.get("gender")
+        feet = request.POST.get("feet")
+        inches = request.POST.get("inches")
+        comorbidityType = request.POST.get("comorbidityType")
+            
+        comorbidityType = int(comorbidityType)
+        height = ((int(feet)*12) + int(inches))
+
+        new_person = person()
+        new_person.email = User.email
+        new_person.username = User.username
+        new_person.password = User.password
+        new_person.first_name = firstName
+        new_person.last_name = lastName
+        new_person.birth_date = birthDate
+        new_person.height = height
+        new_person.comorbidity_type_id = comorbidityType
+        new_person.gender = gender
+        new_person.save()
+
+
+    return render(request, 'dashboard/index.html')
     
 def addFoodPageView(request):
-    foodName = request.GET.get("foodName")
-    nutrients = request.GET.get(foodName+"-nutrients")
-    mealType = request.POST.get('mealType')
+    foodName = request.GET.get("foodName") # from test.html
+    nutrients = request.GET.get(foodName+"-nutrients") # from test.html
+    mealType = request.POST.get('mealType') # from addFood.html
     water = 0
     potassium = 0
     sodium = 0
     protein = 0
     phosphorus = 0
-    if nutrients is None:
+    if nutrients is None: # if we didn't get any nutrients
         pass
     else:
-        nutrients = nutrients.replace('\'','\"')
-        nutrients_dict = json.loads(nutrients) 
+        nutrients = nutrients.replace('\'','\"') # reset nutrients in dictionary string
+        nutrients_dict = json.loads(nutrients)  # load nutrients string into dictionary
 
-        for nutrient_name, amount_unit in nutrients_dict.items():
+        for nutrient_name, amount_unit in nutrients_dict.items(): # go through each nutrient and the amount for the food we selected
             if nutrient_name == "Water":
-                water = amount_unit[0]
+                water = amount_unit[0] # set to the first value of the list. The list is [x, mg]
             elif nutrient_name == "Protein":
                 protein = amount_unit[0]
             elif nutrient_name == "Phosphorus, P":
@@ -181,18 +248,7 @@ def addWaterPageView(request):
 
 def storeFoodItemPageView(request):
     # if request.method == 'POST':
-
-
-    #add date
-    record_date = daily_log()
-    record_date.date = request.POST.get('date')
-
-    #add meal
-
-    new_meal = meal()
-    new_meal.meal_type_id = request.POST.get('mealType')
-
-    #Create a new Substance object from the model (like a new record)
+    
     new_substance = substance()
     
     #Store the data from the form to the new object's attributes (like columns)
@@ -266,9 +322,65 @@ def storeFoodItemPageView(request):
     
     #Save the employee record
     new_substance.save()
+
+    
+
+    #add date
+    record_date = daily_log()
+    
+    record_date.date = date.today()
+
+    meal_type = request.GET.get('mealType')
+
+    if meal_type =="B":
+        record_date.meal_type_id = 1
+    elif meal_type =="L":
+        record_date.meal_type_id = 2
+    elif meal_type =="D":
+        record_date.meal_type_id = 3
+    elif meal_type =="S":
+        record_date.meal_type_id = 4
+    else:
+        record_date.meal_type_id = 5
+
         
-    #Make a list of all of the employee records and store it to the variable
-    # data = substance.objects.all()
+    record_date.person_id = 9
+    record_date.substance_id = 21
+    #add meal
+
+    # new_meal = meal()
+    # new_meal.meal_type_id = request.POST.get('mealType')
+
+    #Create a new Substance object from the model (like a new record)
+    
+    record_date.save()
+
+    # this is michael's attempt to join our data
+    
+    import psycopg2
+    
+    conn = psycopg2.connect(
+        database="kidneywatch3", user='postgres',
+    password='manger', host='localhost', port='5432'
+    )
+    
+    conn.autocommit = True
+    cursor = conn.cursor()
+    
+    sql = '''SELECT * from homepages_daily_log dl
+    INNER JOIN homepages_substance s on s.id = dl.substance_id
+    INNER JOIN homepages_person p on p.id = dl.person_id
+    INNER JOIN homepages_meal_type mt on mt.id = dl.meal_type_id
+    INNER JOIN homepages_comorbidity_type ct on ct.id = p.comorbidity_type_id'''
+    # sql = 'bop'
+    cursor.execute(sql)
+    
+    results = cursor.fetchall()
+    # print(sql)
+    # conn.commit()
+    # conn.close()
+    # Make a list of all of the employee records and store it to the variable
+    data = substance.objects.all()
 
     #Assign the list of employee records to the dictionary key "our_emps"
     # context = {
@@ -282,6 +394,7 @@ def storeFoodItemPageView(request):
     substanceProteinTotal = 0
     substancePhosTotal = 0
     substanceWaterTotal = 0
+    filter = daily_log.objects.filter(person_id = 9).select_related()
     for list in substance.objects.all():
         substanceName.append(list.name)
         substanceK.append(list.k)
@@ -299,12 +412,16 @@ def storeFoodItemPageView(request):
     # substanceWaterTotal = 1000000
     # for list in substanceK:
     #     substanceKTotal = int(substanceK[list]) + int(substanceKTotal)
+    result_type = type(results)
     totalList = [substancePercentageK, substancePercentageNa, substancePercentageProtein, substancePercentagePhos, substancePercentageWater]
     context = {
         'substanceName' : substanceName,
         'substanceK' : substanceK,
         'substanceKTotal' : substanceKTotal,
         'nutrientlist' : nutrientlist,
-        'totalList' : totalList
+        'totalList' : totalList,
+        'results' : result_type,
+        'sql' : sql,
+        'filter' : filter
     }
     return render(request, 'dashboard/index.html', context)
