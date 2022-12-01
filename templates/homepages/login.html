@@ -16,15 +16,15 @@
             {% csrf_token %}
             <!-- Email input -->
             <div class="form-outline mb-4">
-              <input name='username'type="email" id="form3Example3" class="form-control form-control-lg"
-                placeholder="Enter a valid email address" />
+              <input name='loginUsername'type="email" id="form3Example3" class="form-control form-control-lg"
+                placeholder="Enter your username" />
               <label class="form-label" for="form3Example3">Username</label>
             </div>
   
             <!-- Password input -->
             <div class="form-outline mb-3">
-              <input name='password'type="password" id="form3Example4" class="form-control form-control-lg"
-                placeholder="Enter password" />
+              <input name='loginPassword'type="password" id="form3Example4" class="form-control form-control-lg"
+                placeholder="Enter your password" />
               <label class="form-label" for="form3Example4">Password</label>
             </div>
   
@@ -36,7 +36,7 @@
                   Remember me
                 </label>
               </div>
-              <a href="#!" class="text-body">Forgot password?</a>
+              {% comment %} <a href="#!" class="text-body">Forgot password?</a> {% endcomment %}
             </div>
   
             <div class="text-center text-lg-start mt-4 pt-2">

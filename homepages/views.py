@@ -137,8 +137,8 @@ def dataRender(request):
             return render(request, 'homepages/test.html')
 def loginAuthentication(request):
     if request.method =='POST':
-        username= request.POST.get('username')
-        password= request.POST.get('password')
+        username= request.POST.get('loginUsername')
+        password= request.POST.get('loginPassword')
 
         user = authenticate(request, username=username, password=password)
 
@@ -182,13 +182,14 @@ def createUserPageView(request):
         feet = request.POST.get("feet")
         inches = request.POST.get("inches")
         comorbidityType = request.POST.get("comorbidityType")
+        weight = request.POST.get("weight")
             
         comorbidityType = int(comorbidityType)
         height = ((int(feet)*12) + int(inches))
 
         new_person = person()
         new_person.email = User.email
-        new_person.username = User.username
+        new_person.personname = User.username
         new_person.password = User.password
         new_person.first_name = firstName
         new_person.last_name = lastName
@@ -196,6 +197,7 @@ def createUserPageView(request):
         new_person.height = height
         new_person.comorbidity_type_id = comorbidityType
         new_person.gender = gender
+        new_person.weight = weight
         new_person.save()
 
 
